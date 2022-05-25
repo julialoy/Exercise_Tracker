@@ -9,10 +9,14 @@ const app = express();
 app.use(express.json());
 
 const validateDate = (dateString) => {
+    // If the dateString is undefined or null, return false and do no more work
+    if (!dateString) {
+        return false;
+    }
     // Months with 31 days
     const monthsThirtyOne = [1,3,5,6,7,10,12];
     const dateArray = dateString.split('-');
-    const validCandidates = dateArray.filter(datePart => datePart.length === 2);
+    const validCandidates = dateArray.filter(datePart => datePart.length === 2).map(datePart => parseInt(datePart)).filter(dateNum => Number.isInteger(dateNum));
     if (dateString === undefined || dateString === null) {
         // Ensure there is a date in the request
         console.log(`MISSING DATE STRING`);
@@ -21,28 +25,29 @@ const validateDate = (dateString) => {
         // If the dateString is not in the format XX-XX-XX, validCandidates will not have the expected length of 3
         console.log(`DATE STRING FORMAT IS INCORRECT: ${dateString}, ${validCandidates}`);
         return false;
-    } else if (parseInt(validCandidates[0]) < 1 || parseInt(validCandidates[0]) > 12) {
+    } else if (validCandidates[0] < 1 || validCandidates[0] > 12) {
         console.log(`MONTH FIELD IS INVALD: ${dateString}`);
         return false;
     } else {
+        console.log(`MONTH FIELD IS VALID: ${0 < validCandidates[0] < 13}`);
         // If validCandidates has a valid month as its first item, check that second item is a valid day
-        if (monthsThirtyOne.includes(parseInt(validCandidates[0]))) {
+        if (monthsThirtyOne.includes(validCandidates[0])) {
             // If month can have 31 days, ensure day is not less than 0 or greater than 31
-            if (parseInt(validCandidates[1]) < 1 || parseInt(validCandidates[1]) > 31) {
+            if (validCandidates[1] < 1 || validCandidates[1] > 31) {
                 console.log(`MONTH CAN ONLY HAVE UP TO 31 DAYS AND NO LESS THAN 1: ${dateString}`);
                 return false;
             }
-        } else if (parseInt(validCandidates[0]) !== 2) {
+        } else if (validCandidates[0] !== 2) {
             // If months is not February and does not have 31 days, ensure day is not less than 0 or greater than 30
-            if (parseInt(validCandidates[1]) < 1 || parseInt(validCandidates[1]) > 30) {
+            if (validCandidates[1] < 1 || validCandidates[1] > 30) {
                 console.log(`MONTH CAN ONLY HAVE UP TO 30 DAYS AND NO LESS THAN 1: ${dateString}`);
                 return false;
             }
-        } else if (parseInt(validCandidates[1]) < 1 || parseInt(validCandidates[1]) > 29) {
+        } else if (validCandidates[1] < 1 || validCandidates[1] > 29) {
             // If month is February, ensure day is not less than 0 or greater than 29
             console.log(`FEBRUARY CAN ONLY HAVE UP TO 29 DAYS AND NO LESS THAN 1: ${dateString}`);
             return false;
-        } else if (parseInt(validCandidates[1]) > 28 && parseInt(validCandidates[2]) % 4 !== 0) {
+        } else if (validCandidates[1] > 28 && validCandidates[2] % 4 !== 0) {
             // If month is February and the year is not a leap year, check that day is not greater than 28
             // At this point, days have been validated and are not less than 0 or greater than 29
             console.log(`YEAR IS NOT A LEAP YEAR, FEBRUARY CAN ONLY HAVE UP TO 28 DAYS: ${dateString}`);
@@ -101,6 +106,18 @@ app.post('/exercises', (req, res) => {
     } else {
         res.status(400).json({Error: "Invalid request"});
     }
+});
+
+app.get('/exercises', (req, res) => {
+    exercises.findExercises({})
+    .then(data => {
+        res.status(200).send(data);
+    })
+    .catch(error => {
+        console.log(`An error occurred while querying the database: ${error}`);
+        // Does this need to be a specific status?
+        res.send();
+    });
 });
 
 app.listen(PORT, () => {
