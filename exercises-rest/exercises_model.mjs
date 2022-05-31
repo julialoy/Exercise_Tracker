@@ -62,8 +62,8 @@ const findExerciseById = async (_id) => {
  * @param {String} date 
  * @returns A promise
  */
-const replaceExercise = async (_id, name, reps, weight, unit, date) => {
-    const result = await Exercise.replaceOne({_id: _id}, {name: name, reps: reps, weight: weight, unit: unit, date: date});
+const updateExercise = async (_id, name, reps, weight, unit, date) => {
+    const result = await Exercise.updateOne({_id: _id}, {name: name, reps: reps, weight: weight, unit: unit, date: date});
     return result.modifiedCount;
 };
 
@@ -81,4 +81,4 @@ db.once("open", () => {
     console.log("Successfully connected to MongoDB using Mongoose!");
 });
 
-export { createExercise, findExercises, findExerciseById, replaceExercise, deleteById };
+export { createExercise, findExercises, findExerciseById, updateExercise, deleteById };

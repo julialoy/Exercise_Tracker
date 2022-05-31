@@ -1,5 +1,8 @@
 body {
-  background-color: rgb(255,255,255);
+  font-family: 'Poppins', sans-serif;
+  background-color: #FBD1A2;
+  margin: 2em;
+  padding: 2em;
 }
 
 .App {
@@ -20,19 +23,38 @@ body {
   color: #61dafb;
 }
 
-td, th {
+/* td, th {
   border: 1px solid #ddd;
   padding: 8px;
+} */
+
+/* tr:nth-child(even){background-color: #f2f2f2;} */
+tr th {
+  border: #61dafb;
+  color:#1D4E89;
+  padding: 0.25em;
 }
 
-tr:nth-child(even){background-color: #f2f2f2;}
+td th {
+  border: #61dafb;
+  color: #61dafb;
+  padding: 0.25em;
+}
 
-tr:hover {background-color: #ddd;}
+tr:hover {background-color: #7DCFB6;}
 
-th {
+input {
+  font-family: 'Poppins', sans-serif;
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #04AA6D;
-  color: white;
-}
+  background-color: #00B2CA;
+  color: #1D4E89;
+} */

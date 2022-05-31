@@ -8,101 +8,83 @@ const app = express();
 
 app.use(express.json());
 
-const validateDate = (dateString) => {
-    // If the dateString is undefined or null, return false and do no more work
-    if (!dateString) {
+const isNameValid = (name) => {
+    if (!name) {
+        console.log(`No name provided: ${name}`);
+        return false;
+    } else if (typeof name !== 'string') {
+        console.log(`Name type incorrect: ${typeof name}`);
         return false;
     }
-    // Months with 31 days
-    const monthsThirtyOne = [1,3,5,6,7,10,12];
-    const dateArray = dateString.split('-');
-    const validCandidates = dateArray.filter(datePart => datePart.length === 2).map(datePart => parseInt(datePart)).filter(dateNum => Number.isInteger(dateNum));
-    if (dateString === undefined || dateString === null) {
-        // Ensure there is a date in the request
-        console.log(`MISSING DATE STRING`);
-        return false;
-    } else if (validCandidates.length !== 3) {
-        // If the dateString is not in the format XX-XX-XX, validCandidates will not have the expected length of 3
-        console.log(`DATE STRING FORMAT IS INCORRECT: ${dateString}, ${validCandidates}`);
-        return false;
-    } else if (validCandidates[0] < 1 || validCandidates[0] > 12) {
-        console.log(`MONTH FIELD IS INVALD: ${dateString}`);
-        return false;
-    } else {
-        console.log(`MONTH FIELD IS VALID: ${0 < validCandidates[0] < 13}`);
-        // If validCandidates has a valid month as its first item, check that second item is a valid day
-        if (monthsThirtyOne.includes(validCandidates[0])) {
-            // If month can have 31 days, ensure day is not less than 0 or greater than 31
-            if (validCandidates[1] < 1 || validCandidates[1] > 31) {
-                console.log(`MONTH CAN ONLY HAVE UP TO 31 DAYS AND NO LESS THAN 1: ${dateString}`);
-                return false;
-            }
-        } else if (validCandidates[0] !== 2) {
-            // If months is not February and does not have 31 days, ensure day is not less than 0 or greater than 30
-            if (validCandidates[1] < 1 || validCandidates[1] > 30) {
-                console.log(`MONTH CAN ONLY HAVE UP TO 30 DAYS AND NO LESS THAN 1: ${dateString}`);
-                return false;
-            }
-        } else if (validCandidates[1] < 1 || validCandidates[1] > 29) {
-            // If month is February, ensure day is not less than 0 or greater than 29
-            console.log(`FEBRUARY CAN ONLY HAVE UP TO 29 DAYS AND NO LESS THAN 1: ${dateString}`);
-            return false;
-        } else if (validCandidates[1] > 28 && validCandidates[2] % 4 !== 0) {
-            // If month is February and the year is not a leap year, check that day is not greater than 28
-            // At this point, days have been validated and are not less than 0 or greater than 29
-            console.log(`YEAR IS NOT A LEAP YEAR, FEBRUARY CAN ONLY HAVE UP TO 28 DAYS: ${dateString}`);
-            return false;
-        }
-    }
-    // All parts of dateString are present and valid
+
     return true;
 };
 
-// const validateNewExercise = (req) => {
-//     const exerciseProperties = ["name", "reps", "weight", "unit", "date"];
-//     exerciseProperties.forEach(prty => {
-//         if (req.body[prty]) {
-//             if (prty === "reps" || prty === "weight") {
-//                 // Ensure reps and weight properties are numbers that are greater than 0
-//                 if (typeof req.body[prty] !== Number) {
-//                     return false;
-//                 } else if (req.body[prty] <= 0) {
-//                     return false;
-//                 }
-//             } else if (prty === "unit") {
-//                 // Ensure unit property is a string equal to "lbs" or "kgs"
-//                 if (prty !== "lbs" || prty !== "kgs") {
-//                     return false;
-//                 }
-//             } else if (prty === "name" || prty === "date") {
-//                 // Ensure name and date properties are strings
-//                 if (typeof req.body[prty] !== String) {
-//                     return false;
-//                 } else {
-//                     if (prt === "date") {
-//                         // If current property is the date property, validate the date
-//                         if (!validateDate(req.body[prty])) {
-//                             return false;
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//     });
-//     // All properties are present and valid
-//     return true;
-// };
+const isRepsAndWeightValid = (reps, weight) => {
+    if (!reps || !weight) {
+        console.log(`Reps and/or weight missing: ${reps} ${weight}`)
+        return false;
+    }
+    
+    const numReps = parseInt(reps);
+    const numWeight = parseInt(weight);
+    if (Number.isNaN(numReps) || Number.isNaN(numWeight)) {
+        console.log(`Reps and/or weight type incorrect: ${typeof numReps} ${typeof numWeight}`);
+        return false;
+    } else if (0 >= numReps || 0 >= numWeight) {
+        console.log(`Reps or weight below minimum number: ${reps} ${weight}`);
+        return false;
+    }
+
+    return true;
+};
+
+const isUnitValid = (unit) => {
+    if (!unit) {
+        console.log(`Unit missing: ${unit}`);
+        return false;
+    } if (unit !== "lbs" && unit !== "kgs") {
+        console.log(`Bad unit provided: ${unit}`);
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * 
+ * @param {String} date 
+ * @returns true if the date format is MM-DD-YY where MM, DD and YY are 2 digit integers
+ * Function provided in assignment 7 module
+ */
+const isDateValid = (date) => {
+    const format = /^\d\d-\d\d-\d\d$/;
+    return format.test(date);
+};
+
+const validateExercise = (req) => {
+    if (isDateValid(req.body.date) &&
+        isNameValid(req.body.name) &&
+        isRepsAndWeightValid(req.body.reps, req.body.weight) &&
+        isUnitValid(req.body.unit)
+    ) {
+        return true;
+    }
+
+    return false;
+}
 
 app.post('/exercises', (req, res) => {
-    if (validateDate(req.body.date)) {
+    if (validateExercise(req)) {
         exercises.createExercise(req.body.name, req.body.reps, req.body.weight, req.body.unit, req.body.date)
-        .then(exercise => {
-            res.status(201).json(exercise);
-        })
-        .catch(error => {
-            console.log(`Unable to save exercise to database: ${error}`);
-            res.status(400).json({Error: "Invalid request"});
-        });
+            .then(exercise => {
+                res.status(201).json(exercise);
+            })
+            .catch(error => {
+                console.log(`Unable to save exercise to database: ${error}`);
+                // Is this status and message ok?
+                res.status(400).json({Error: "Invalid request"});
+            });
     } else {
         res.status(400).json({Error: "Invalid request"});
     }
@@ -110,14 +92,75 @@ app.post('/exercises', (req, res) => {
 
 app.get('/exercises', (req, res) => {
     exercises.findExercises({})
-    .then(data => {
-        res.status(200).send(data);
-    })
-    .catch(error => {
-        console.log(`An error occurred while querying the database: ${error}`);
-        // Does this need to be a specific status?
-        res.send();
-    });
+        .then(data => {
+            res.status(200).send(data);
+        })
+        .catch(error => {
+            console.log(`An error occurred while querying the database: ${error}`);
+            // Is this status and message ok?
+            res.status(400).json({Error: "Request failed"});
+        });
+});
+
+app.get('/exercises/:_id', (req, res) => {
+    const exerciseId = req.params._id;
+    exercises.findExerciseById(exerciseId)
+        .then(exercise => {
+            if (exercise !== null) {
+                res.status(200).json(exercise);
+            } else {
+                res.status(404).json({Error: "Not found"});
+            }
+        })
+        .catch(error => {
+            console.error(`An error occurred while querying the database: ${error}`);
+            // Is this status and message ok?
+            res.status(400).json({Error: "Request failed"});
+        });
+});
+
+app.put('/exercises/:_id', (req, res) => {
+    const exerciseId = req.params._id;
+    if (validateExercise(req)) {
+        exercises.updateExercise(exerciseId, req.body.name, req.body.reps, req.body.weight, req.body.unit, req.body.date)
+            .then(exerciseCount => {
+                if (exerciseCount === 1) {
+                    const updatedExercise = {
+                        _id: exerciseId,
+                        name: req.body.name,
+                        reps: req.body.reps,
+                        weight: req.body.weight,
+                        unit: req.body.unit,
+                        date: req.body.date
+                    };
+                    res.status(200).json(updatedExercise);
+                } else {
+                    res.status(404).json({Error: "Not found"});
+                }
+            })
+            .catch(error => {
+                console.log(`An error occurred while trying to update the database: ${error}`);
+                // Is this status and message ok?
+                res.status(400).json({Error: "Request failed"});
+            });
+    } else {
+        res.status(400).json({Error: "Invalid request"});
+    }
+});
+
+app.delete('/exercises/:_id', (req, res) => {
+    exercises.deleteById(req.params._id)
+        .then(deleteCount => {
+            if (deleteCount === 1) {
+                res.status(204).send();
+            } else {
+                res.status(404).json({Error: "Not found"});
+            }
+        })
+        .catch(error => {
+            console.log(`An error occurred while trying to delete the record from the database: ${error}`);
+            res.status(400).json({Error: "Invalid request"});
+        });
 });
 
 app.listen(PORT, () => {
