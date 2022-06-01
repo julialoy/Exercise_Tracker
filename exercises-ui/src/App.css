@@ -1,15 +1,76 @@
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #FBD1A2;
-  margin: 2em;
-  padding: 2em;
-}
+/* GENERAL/BODY */
 
 .App {
   text-align: center;
 }
 
-.App-header {
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #FCEADE;
+  margin: 5em;
+  padding: 5em;
+}
+
+/* h1 {
+
+}
+
+h2 {
+
+} */
+
+
+/* HEADER/FOOTER */
+
+header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background-color: #FF8A5B;
+  color: #FCEADE;
+  margin-bottom: 0em;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #FF8A5B;
+  color: #FCEADE;
+  padding: 2em;
+}
+
+/* NAVIGATION */
+
+.nav-bar ul {
+  list-style-type: none;
+}
+
+.nav-bar-item {
+  padding: 1em;
+  display: inline;
+  margin: 0em 0.1em 2em 0.1em;
+  background-color: #25CED1;
+  color: white;
+  border-radius: 5px;
+}
+
+.nav-bar-link {
+  text-decoration: none;
+}
+
+.nav-bar-link:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-bar-link:hover {
+  color: #1D4E89;
+}
+
+/* .App-header {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -21,7 +82,7 @@ body {
 
 .App-link {
   color: #61dafb;
-}
+} */
 
 /* td, th {
   border: 1px solid #ddd;
@@ -29,26 +90,77 @@ body {
 } */
 
 /* tr:nth-child(even){background-color: #f2f2f2;} */
+
+/* table {
+  border: 0.25em solid #25CED1;
+}
+
 tr th {
-  border: #61dafb;
+  background-color: #25CED1;
+  padding: 0.25em;
+}
+
+tr th {
+  border: #25CED1;
   color:#1D4E89;
   padding: 0.25em;
 }
 
-td th {
-  border: #61dafb;
-  color: #61dafb;
+tr td {
+  border: #25CED1;
+  color: #1D4E89;
   padding: 0.25em;
 }
 
-tr:hover {background-color: #7DCFB6;}
+
+ */
+
+/* TABLES */
+
+table {
+  display: inline-block;
+  border-collapse: collapse;
+}
+
+tr th {
+  border-left: solid 0.25rem #1D4E89;
+  border-bottom: solid 0.25rem #1D4E89;
+  background-color: #1D4E89;
+  color: #FCEADE;
+  padding: 0.5rem;
+}
+
+tr th:first-child, tr td:first-child {
+  border-left: none;
+}
+
+tr td {
+  border-left: solid 0.25rem #1D4E89;
+  color: #1D4E89;
+  padding: 0.5rem;
+}
+
+tr:hover {background-color: #FFFFFF;}
+
+.icon {
+  cursor: pointer;
+}
+
+/* FORMS */
 
 input {
   font-family: 'Poppins', sans-serif;
+  margin: 0.25em;
+}
+
+select {
+  font-family: 'Poppins', sans-serif;
+  margin: 0.25em;
 }
 
 button {
   font-family: 'Poppins', sans-serif;
+  margin: 0.25em;
 }
 
 /* th {

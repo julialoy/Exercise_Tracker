@@ -20,6 +20,17 @@ const Exercise = mongoose.model("Exercise", exerciseSchema);
 
 /**
  * 
+ * @param {String} date 
+ * @returns true if the date format is MM-DD-YY where MM, DD and YY are 2 digit integers
+ * Function provided in assignment 7 module
+ */
+ const isDateValid = (date) => {
+    const format = /^\d\d-\d\d-\d\d$/;
+    return format.test(date);
+};
+
+/**
+ * 
  * @param {String} name 
  * @param {Number} reps 
  * @param {Number} weight 
@@ -28,8 +39,13 @@ const Exercise = mongoose.model("Exercise", exerciseSchema);
  * @returns A promise that resolves to the JavaScript object for the document calling save.
  */
 const createExercise = async (name, reps, weight, unit, date) => {
-    const exercise = new Exercise({name: name, reps: reps, weight: weight, unit: unit, date: date});
-    return exercise.save();
+    const dateValid = isDateValid(date);
+    if (!dateValid) {
+        return null;
+    } else {
+        const exercise = new Exercise({name: name, reps: reps, weight: weight, unit: unit, date: date});
+        return exercise.save();
+    }
 };
 
 /**
@@ -63,8 +79,13 @@ const findExerciseById = async (_id) => {
  * @returns A promise
  */
 const updateExercise = async (_id, name, reps, weight, unit, date) => {
-    const result = await Exercise.updateOne({_id: _id}, {name: name, reps: reps, weight: weight, unit: unit, date: date});
-    return result.modifiedCount;
+    const dateValid = isDateValid(date);
+    if (!dateValid) {
+        return 0;
+    } else {
+        const result = await Exercise.updateOne({_id: _id}, {name: name, reps: reps, weight: weight, unit: unit, date: date});
+        return result.modifiedCount;
+    }
 };
 
 /**

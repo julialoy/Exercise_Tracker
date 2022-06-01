@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import * as exercises from './exercises_model.mjs';
 import express from 'express';
+// import { body, validationResult } from 'express-validator';
 
 const PORT = process.env.PORT;
 
@@ -14,6 +15,8 @@ const isNameValid = (name) => {
         return false;
     } else if (typeof name !== 'string') {
         console.log(`Name type incorrect: ${typeof name}`);
+        return false;
+    } else if (name === " ") {
         return false;
     }
 
@@ -57,10 +60,11 @@ const isUnitValid = (unit) => {
  * @returns true if the date format is MM-DD-YY where MM, DD and YY are 2 digit integers
  * Function provided in assignment 7 module
  */
-const isDateValid = (date) => {
+ const isDateValid = (date) => {
     const format = /^\d\d-\d\d-\d\d$/;
     return format.test(date);
 };
+
 
 const validateExercise = (req) => {
     if (isDateValid(req.body.date) &&
@@ -74,7 +78,24 @@ const validateExercise = (req) => {
     return false;
 }
 
-app.post('/exercises', (req, res) => {
+app.post('/exercises', 
+    // body('name').isAlpha(),
+    // body('reps').isNumeric({no_symbols: true}).isIn({min: 1}), 
+    // body('weight').isNumeric({no_symbols: true}).isIn({min: 1}), 
+    // body('unit').isIn(['kg', 'lbs']), 
+    (req, res) => {
+        // exercises.createExercise(req.body.name, req.body.reps, req.body.weight, req.body.unit, req.body.date)
+        //     .then(exercise => {
+        //         if (exercise !== null) {
+        //             res.status(201).json(exercise);
+        //         } else {
+        //             res.status(400).json({Error: "Invalid request"});
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(`Unable to save exercise: ${error}`);
+        //         res.status(400).json({Error: "Invalid request"});
+        //     });
     if (validateExercise(req)) {
         exercises.createExercise(req.body.name, req.body.reps, req.body.weight, req.body.unit, req.body.date)
             .then(exercise => {
@@ -88,6 +109,20 @@ app.post('/exercises', (req, res) => {
     } else {
         res.status(400).json({Error: "Invalid request"});
     }
+    // const validDate = isDateValid(req.body.date);
+    // const otherErrors = validationResult(req);
+    // if (!validDate && !otherErrors.isEmpty()) {
+    //     res.status(400).json({Error: "Invalid request"});
+    // } else {
+    //     exercises.createExercise(req.body.name, req.body.reps.req.body.reps, req.body.weight, req.body.unit, req.body.date)
+    //         .then(exercise => {
+    //             res.status(201).json(exercise);
+    //         })
+    //         .catch(error => {
+    //             console.log(`Unable to save exercise to database: ${error}`);
+    //             res.status(400).json({Error: "Invalid request"});
+    //         });
+    // }
 });
 
 app.get('/exercises', (req, res) => {
@@ -115,11 +150,31 @@ app.get('/exercises/:_id', (req, res) => {
         .catch(error => {
             console.error(`An error occurred while querying the database: ${error}`);
             // Is this status and message ok?
-            res.status(400).json({Error: "Request failed"});
+            res.status(404).json({Error: "Request failed"});
         });
 });
 
 app.put('/exercises/:_id', (req, res) => {
+        // exercises.updateExercise(req.params._id, req.body.name, req.body.reps, req.body.weight, req.body.unit, req.body.date)
+        //     .then(exerciseCount => {
+        //         if (exerciseCount !== 0) {
+        //             const updatedExercise = {
+        //                 _id: req.body.id,
+        //                 name: req.body.name,
+        //                 reps: req.body.reps,
+        //                 weight: req.body.weight,
+        //                 unit: req.body.unit,
+        //                 date: req.body.date
+        //             };
+        //             res.status(200).json(updatedExercise);
+        //         } else {
+        //             res.status(404).json({Error: "Not found"});
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(`Unable to update exercise: ${error}`);
+        //         res.status(404).json({Error: "Not found"});
+        //     });
     const exerciseId = req.params._id;
     if (validateExercise(req)) {
         exercises.updateExercise(exerciseId, req.body.name, req.body.reps, req.body.weight, req.body.unit, req.body.date)
@@ -141,10 +196,10 @@ app.put('/exercises/:_id', (req, res) => {
             .catch(error => {
                 console.log(`An error occurred while trying to update the database: ${error}`);
                 // Is this status and message ok?
-                res.status(400).json({Error: "Request failed"});
+                res.status(404).json({Error: "Request failed"});
             });
     } else {
-        res.status(400).json({Error: "Invalid request"});
+        res.status(404).json({Error: "Invalid request"});
     }
 });
 
