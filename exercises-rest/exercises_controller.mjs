@@ -176,10 +176,18 @@ app.put('/exercises/:_id', (req, res) => {
         //         res.status(404).json({Error: "Not found"});
         //     });
     const exerciseId = req.params._id;
+    console.log(`EXERCISE TO FIND: ${exerciseId}`);
+    console.log(req.body.name);
+    console.log(req.body.reps);
+    console.log(req.body.weight);
+    console.log(req.body.unit);
+    console.log(req.body.date);
     if (validateExercise(req)) {
         exercises.updateExercise(exerciseId, req.body.name, req.body.reps, req.body.weight, req.body.unit, req.body.date)
             .then(exerciseCount => {
+                console.log(`Exercise count is ${exerciseCount}`);
                 if (exerciseCount === 1) {
+                    console.log(`Valid exercise`);
                     const updatedExercise = {
                         _id: exerciseId,
                         name: req.body.name,
@@ -190,6 +198,7 @@ app.put('/exercises/:_id', (req, res) => {
                     };
                     res.status(200).json(updatedExercise);
                 } else {
+                    console.log(`Exercise not found`);
                     res.status(404).json({Error: "Not found"});
                 }
             })
@@ -199,7 +208,8 @@ app.put('/exercises/:_id', (req, res) => {
                 res.status(404).json({Error: "Request failed"});
             });
     } else {
-        res.status(404).json({Error: "Invalid request"});
+        console.log(`Invalid exercise updtae`);
+        res.status(400).json({Error: "Invalid request"});
     }
 });
 

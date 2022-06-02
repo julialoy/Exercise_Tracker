@@ -37,23 +37,23 @@ export const CreateExercisePage = () => {
             <h1>Add Exercise</h1>
             <input
                 type="text"
-                placeholder="Enter exercise name here"
+                placeholder="Enter exercise name"
                 value={name}
                 onChange={e => setName(e.target.value)} />
             <input
                 type="number"
                 value={reps}
-                placeholder="Enter number of reps here"
+                placeholder="Enter reps"
                 onChange={e => setReps(e.target.value)} />
             <input
                 type="number"
-                placeholder="Enter weight here"
+                placeholder="Enter weight"
                 value={weight}
                 onChange={e => setWeight(e.target.value)} />
             <select
                 name="units"
-                placeholder="Enter weight unit (lbs or kgs) here"
                 value={unit}
+                selected={unit}
                 onChange={e => setUnit(e.target.value)}>
                     <option value="">--Please choose a unit--</option>
                     <option value="lbs">lbs</option>
@@ -61,7 +61,7 @@ export const CreateExercisePage = () => {
             </select>
             <input
                 type="text"
-                placeholder="Enter date (MM-DD-YY) here"
+                placeholder="Date (MM-DD-YY)"
                 value={date}
                 onChange={e => setDate(e.target.value)} />
             <button

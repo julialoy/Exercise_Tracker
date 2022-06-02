@@ -79,14 +79,21 @@ const findExerciseById = async (_id) => {
  * @returns A promise
  */
 const updateExercise = async (_id, name, reps, weight, unit, date) => {
+    console.log(`Updating this id: ${_id}`);
     const dateValid = isDateValid(date);
     if (!dateValid) {
+        console.log("Date invalid");
         return 0;
     } else {
-        const result = await Exercise.updateOne({_id: _id}, {name: name, reps: reps, weight: weight, unit: unit, date: date});
+        const result = await Exercise.replaceOne({_id: _id}, {name: name, reps: reps, weight: weight, unit: unit, date: date});
+        // await result.save();
         return result.modifiedCount;
     }
 };
+
+// const updateManyExercises = async (filter) => {
+
+// }
 
 /**
  * 

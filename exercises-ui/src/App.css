@@ -27,8 +27,8 @@ header {
   left: 0;
   top: 0;
   width: 100%;
-  background-color: #FF8A5B;
-  color: #FCEADE;
+  background-color: #FCEADE;
+  color: #1D4E89;
   margin-bottom: 0em;
 }
 
@@ -43,6 +43,10 @@ footer {
 }
 
 /* NAVIGATION */
+
+.nav-bar {
+  margin-bottom: 2em;
+}
 
 .nav-bar ul {
   list-style-type: none;
