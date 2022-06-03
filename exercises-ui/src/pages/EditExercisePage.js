@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 
 export const EditExercisePage = ({ exerciseToEdit }) => {
 
-    /* Initialize state with movieToEdit's data */
     const [name, setName] = useState(exerciseToEdit.name);
     const [reps, setReps] = useState(exerciseToEdit.reps);
     const [weight, setWeight] = useState(exerciseToEdit.weight);
@@ -13,23 +12,19 @@ export const EditExercisePage = ({ exerciseToEdit }) => {
     const history = useHistory();
 
     const editExercise = async () => {
-        /* Collect values of state variable */
         const editedExercise = {name, reps, weight, unit, date};
         const response = await fetch(`/exercises/${exerciseToEdit._id}`, {
             method: 'PUT',
-            /* Fetch requires the body to be a string, we will set it to the string representation of the JSON object */
             body: JSON.stringify(editedExercise),
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         if (response.status === 200) {
-            alert("Successfully updated the exercise");
+            alert('Successfully updated the exercise');
         } else {
-            /* In an actual application, we don't want to show the user the status code. Better choice is "please try again" */
             alert(`Failed to update exercise, status code = ${response.status}`);
         }
-        /* Return to homepage once user dismisses alert regardless of whether movie was edited */
         history.push("/");
     };
 

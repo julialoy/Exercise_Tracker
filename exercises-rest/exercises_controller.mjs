@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import * as exercises from './exercises_model.mjs';
 import express from 'express';
-// import { body, validationResult } from 'express-validator';
+import { check, validationResult } from 'express-validator';
 
 const PORT = process.env.PORT;
 
@@ -16,9 +16,10 @@ const isNameValid = (name) => {
     } else if (typeof name !== 'string') {
         console.log(`Name type incorrect: ${typeof name}`);
         return false;
-    } else if (name === " ") {
-        return false;
-    }
+    } 
+    // else if (name === " ") {
+    //     return false;
+    // }
 
     return true;
 };
@@ -96,15 +97,18 @@ app.post('/exercises',
         //         console.log(`Unable to save exercise: ${error}`);
         //         res.status(400).json({Error: "Invalid request"});
         //     });
+    if (!check('name').exists().notEmpty().isString()) {
+        console.log(`NAME NOT VALID`);
+    }
     if (validateExercise(req)) {
         exercises.createExercise(req.body.name, req.body.reps, req.body.weight, req.body.unit, req.body.date)
             .then(exercise => {
-                res.status(201).json(exercise);
+                res.status(201).setHeader('content-type', 'application/json').json(exercise);
             })
             .catch(error => {
                 console.log(`Unable to save exercise to database: ${error}`);
                 // Is this status and message ok?
-                res.status(400).json({Error: "Invalid request"});
+                res.status(400).setHeader('content-type', 'application/json').json({Error: "Invalid request"});
             });
     } else {
         res.status(400).json({Error: "Invalid request"});
@@ -128,12 +132,12 @@ app.post('/exercises',
 app.get('/exercises', (req, res) => {
     exercises.findExercises({})
         .then(data => {
-            res.status(200).send(data);
+            res.status(200).setHeader('content-type', 'application/json').send(data);
         })
         .catch(error => {
             console.log(`An error occurred while querying the database: ${error}`);
             // Is this status and message ok?
-            res.status(400).json({Error: "Request failed"});
+            res.status(400).setHeader('content-type', 'application/json').json({Error: "Request failed"});
         });
 });
 
@@ -142,15 +146,15 @@ app.get('/exercises/:_id', (req, res) => {
     exercises.findExerciseById(exerciseId)
         .then(exercise => {
             if (exercise !== null) {
-                res.status(200).json(exercise);
+                res.status(200).setHeader('content-type', 'application/json').json(exercise);
             } else {
-                res.status(404).json({Error: "Not found"});
+                res.status(404).setHeader('content-type', 'application/json').json({Error: "Not found"});
             }
         })
         .catch(error => {
             console.error(`An error occurred while querying the database: ${error}`);
             // Is this status and message ok?
-            res.status(404).json({Error: "Request failed"});
+            res.status(404).setHeader('content-type', 'application/json').json({Error: "Request failed"});
         });
 });
 
@@ -196,20 +200,20 @@ app.put('/exercises/:_id', (req, res) => {
                         unit: req.body.unit,
                         date: req.body.date
                     };
-                    res.status(200).json(updatedExercise);
+                    res.status(200).setHeader('content-type', 'application/json').json(updatedExercise);
                 } else {
                     console.log(`Exercise not found`);
-                    res.status(404).json({Error: "Not found"});
+                    res.status(404).setHeader('content-type', 'application/json').json({Error: "Not found"});
                 }
             })
             .catch(error => {
                 console.log(`An error occurred while trying to update the database: ${error}`);
                 // Is this status and message ok?
-                res.status(404).json({Error: "Request failed"});
+                res.status(404).setHeader('content-type', 'application/json').json({Error: "Not found"});
             });
     } else {
         console.log(`Invalid exercise updtae`);
-        res.status(400).json({Error: "Invalid request"});
+        res.status(400).setHeader('content-type', 'application/json').json({Error: "Invalid request"});
     }
 });
 
@@ -219,12 +223,12 @@ app.delete('/exercises/:_id', (req, res) => {
             if (deleteCount === 1) {
                 res.status(204).send();
             } else {
-                res.status(404).json({Error: "Not found"});
+                res.status(404).setHeader('content-type', 'application/json').json({Error: "Not found"});
             }
         })
         .catch(error => {
             console.log(`An error occurred while trying to delete the record from the database: ${error}`);
-            res.status(400).json({Error: "Invalid request"});
+            res.status(400).setHeader('content-type', 'application/json').json({Error: "Invalid request"});
         });
 });
 

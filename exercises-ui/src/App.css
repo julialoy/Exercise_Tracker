@@ -7,17 +7,14 @@
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #FCEADE;
+  color: #1D4E89;
   margin: 5em;
-  padding: 5em;
-}
-
-/* h1 {
-
+  padding: 2em;
 }
 
 h2 {
-
-} */
+  color: #1D4E89;
+}
 
 
 /* HEADER/FOOTER */
@@ -44,82 +41,31 @@ footer {
 
 /* NAVIGATION */
 
-.nav-bar {
-  margin-bottom: 2em;
-}
-
 .nav-bar ul {
   list-style-type: none;
 }
 
 .nav-bar-item {
-  padding: 1em;
+  padding: 0.5em;
   display: inline;
   margin: 0em 0.1em 2em 0.1em;
-  background-color: #25CED1;
-  color: white;
+  color: #1D4E89;
   border-radius: 5px;
 }
 
-.nav-bar-link {
-  text-decoration: none;
-}
-
 .nav-bar-link:visited {
-  text-decoration: none;
-  color: white;
+  color: #1D4E89;
 }
 
 .nav-bar-link:hover {
-  color: #1D4E89;
+  color: #FF8A5B;
 }
-
-/* .App-header {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: black;
-}
-
-.App-link {
-  color: #61dafb;
-} */
-
-/* td, th {
-  border: 1px solid #ddd;
-  padding: 8px;
-} */
-
-/* tr:nth-child(even){background-color: #f2f2f2;} */
-
-/* table {
-  border: 0.25em solid #25CED1;
-}
-
-tr th {
-  background-color: #25CED1;
-  padding: 0.25em;
-}
-
-tr th {
-  border: #25CED1;
-  color:#1D4E89;
-  padding: 0.25em;
-}
-
-tr td {
-  border: #25CED1;
-  color: #1D4E89;
-  padding: 0.25em;
-}
-
-
- */
 
 /* TABLES */
+
+#exercises {
+  margin-top: 5em;
+}
 
 table {
   display: inline-block;
@@ -152,25 +98,9 @@ tr:hover {background-color: #FFFFFF;}
 
 /* FORMS */
 
-input {
-  font-family: 'Poppins', sans-serif;
-  margin: 0.25em;
-}
-
-select {
-  font-family: 'Poppins', sans-serif;
-  margin: 0.25em;
-}
-
+input,
+select,
 button {
   font-family: 'Poppins', sans-serif;
   margin: 0.25em;
 }
-
-/* th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #00B2CA;
-  color: #1D4E89;
-} */

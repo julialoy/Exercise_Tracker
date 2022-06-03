@@ -3,14 +3,13 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import ExerciseList from '../components/ExerciseList';
 
-function HomePage({ setExerciseToEdit }) {
+export const HomePage = ({ setExerciseToEdit }) => {
     const [exercises, setExercises] = useState([]);
     const history = useHistory();
 
     const onDelete = async _id => {
         const response = await fetch(`/exercises/${_id}`, {method: 'DELETE'});
         if (response.status === 204) {
-            //setExercises(exercises.filter(exercise => exercise._id !== _id));
             const getResponse = await fetch('/exercises');
             const exercises = await getResponse.json();
             setExercises(exercises);
