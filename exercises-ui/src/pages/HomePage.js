@@ -20,7 +20,7 @@ export const HomePage = ({ setExerciseToEdit }) => {
 
     const onEdit = exercise => {
         setExerciseToEdit(exercise);
-        history.push("/edit-exercise");
+        history.push('/edit-exercise');
     };
 
     const loadExercises = async () => {

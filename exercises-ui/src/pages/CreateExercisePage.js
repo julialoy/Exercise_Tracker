@@ -12,24 +12,20 @@ export const CreateExercisePage = () => {
     const history = useHistory();
 
     const addExercise = async () => {
-        /* Collect values of state variable */
         const newExercise = {name, reps, weight, unit, date};
         const response = await fetch('/exercises', {
             method: 'POST',
-            /* Fetch requires the body to be a string, we will set it to the string representation of the JSON object */
             body: JSON.stringify(newExercise),
             headers: {
                 'Content-Type': 'application/json',
             },
         });
         if (response.status === 201) {
-            alert("Successfully added the exercise");
+            alert('Successfully added the exercise');
         } else {
-            /* In an actual application, we don't want to show the user the status code. Better choice is "please try again" */
-            alert(`Failed to add exercise, status code = ${response.status}`);
+            alert('Failed to add exercise');
         }
-        /* Return to homepage once user dismisses alert regardless of whether movie was added */
-        history.push("/");
+        history.push('/');
     };
 
     return (

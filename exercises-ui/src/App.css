@@ -1,15 +1,14 @@
 /* GENERAL/BODY */
-
-.App {
-  text-align: center;
-}
-
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #FCEADE;
   color: #1D4E89;
   margin: 5em;
   padding: 2em;
+}
+
+.App {
+  text-align: center;
 }
 
 h2 {

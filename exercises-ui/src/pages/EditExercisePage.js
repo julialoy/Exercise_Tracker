@@ -23,9 +23,9 @@ export const EditExercisePage = ({ exerciseToEdit }) => {
         if (response.status === 200) {
             alert('Successfully updated the exercise');
         } else {
-            alert(`Failed to update exercise, status code = ${response.status}`);
+            alert('Failed to update exercise');
         }
-        history.push("/");
+        history.push('/');
     };
 
     return (
@@ -48,7 +48,6 @@ export const EditExercisePage = ({ exerciseToEdit }) => {
                 value={unit}
                 selected={unit}
                 onChange={e => setUnit(e.target.value)}>
-                    <option value="">--Please choose a unit--</option>
                     <option value="lbs">lbs</option>
                     <option value="kgs">kgs</option>
             </select>
